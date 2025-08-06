@@ -15,6 +15,10 @@ Features include:
 - 🎯 Audience Segments Donut Chart
 - 🗂️ Campaign Performance Table
 - 📎 Export Report Button
+- Filter values in Table Data
+- Download/Export CSV data from Table Data using Export Button
+- Export/Download Charts in pdf using Export Report Button
+- Toggle between Light & Dark theme clicking on sun/moon logo in nav bar
 
 ---
 
