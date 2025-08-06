@@ -1,8 +1,3 @@
-Here’s a complete `README.md` for your project based on the images and tech stack you provided:
-
----
-
-```md
 # 📊 Dashboard Web App
 
 An interactive and visually appealing dashboard web application built to monitor and display campaign insights like **Revenue**, **Growth Rate**, **Active Users**, **Conversions**, and **Channel Performance** using elegant charts and metrics.
@@ -147,10 +142,3 @@ Thanks to:
 * [Next.js](https://nextjs.org/)
 * [Tailwind CSS](https://tailwindcss.com/)
 * [React](https://reactjs.org/)
-
-```
-
----
-
-Let me know if you want a version with sections like `Contributing`, `Live Demo`, or database setup instructions too.
-```
