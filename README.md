@@ -2,10 +2,6 @@
 
 An interactive and visually appealing dashboard web application built to monitor and display campaign insights like **Revenue**, **Growth Rate**, **Active Users**, **Conversions**, and **Channel Performance** using elegant charts and metrics.
 
-![Dashboard Preview](./first-shot.png)
-![Channel & Audience Overview](./second-shot.png)
-![Campaign Performance](./third-shot.png)
-
 ---
 
 ## 🚀 Project Overview
@@ -125,6 +121,7 @@ yarn dev
 ![Dashboard Screenshot](dashboard_frontend/public/first-shot.png)
 ![Chart & Donut Screenshot](dashboard_frontend/public/second-shot.png)
 ![Campaign Table Screenshot](dashboard_frontend/public/third-shot.png)
+![Dashboard Screenshot Theme light](dashboard_frontend/public/fourth-shot.png)
 
 ---
 
