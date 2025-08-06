@@ -122,9 +122,9 @@ yarn dev
 
 ## 📸 UI Preview
 
-![Dashboard Screenshot](./first-shot.png)
-![Chart & Donut Screenshot](./second-shot.png)
-![Campaign Table Screenshot](./third-shot.png)
+![Dashboard Screenshot](dashboard_frontend/public/first-shot.png)
+![Chart & Donut Screenshot](dashboard_frontend/public/second-shot.png)
+![Campaign Table Screenshot](dashboard_frontend/public/third-shot.png)
 
 ---
 
