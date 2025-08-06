@@ -1,6 +1,7 @@
-// src/components/Dashboard/DashboardLayout.tsx
+"use client";
 
 import React, { useState } from 'react';
+import { useTheme } from 'next-themes';
 import { BarChart3, TrendingUp, Users, DollarSign, PieChart, Settings, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/ThemeButton';
@@ -14,8 +15,9 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   const navigation = [
     { name: 'Overview', icon: BarChart3, href: '#', current: true },
@@ -28,6 +30,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   const exportToPdf = async () => {
     setIsExporting(true);
+    const originalTheme = theme;
+    // Force light theme for PDF export for consistency
+    setTheme('light');
+
+    // Allow time for theme to apply
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     try {
       const chartElements = document.querySelectorAll('.chart-container');
       const pdf = new jsPDF('p', 'mm', 'a4');
@@ -41,15 +50,20 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, yOffset, { align: 'center' });
       yOffset += 15;
 
+      const canvasOptions = {
+        scale: 2,
+        logging: false,
+        useCORS: true,
+        backgroundColor: '#ffffff', // Explicitly set white background
+      };
+
       if (chartElements.length === 0) {
         const dashboardContent = document.querySelector('main');
         if (dashboardContent) {
           const canvas = await html2canvas(dashboardContent as HTMLElement, {
+            ...canvasOptions,
             scale: 1.5,
-            logging: false,
-            useCORS: true,
             allowTaint: true,
-            backgroundColor: null,
           });
 
           const imgWidth = 210;
@@ -62,12 +76,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       } else {
         for (let i = 0; i < chartElements.length; i++) {
           const chart = chartElements[i] as HTMLElement;
-          const canvas = await html2canvas(chart, {
-            scale: 2,
-            logging: false,
-            useCORS: true,
-            backgroundColor: null,
-          });
+          const canvas = await html2canvas(chart, canvasOptions);
 
           const chartTitle = chart.getAttribute('data-title') || `Chart ${i + 1}`;
           if (yOffset > 240 && i > 0) {
@@ -92,8 +101,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     } catch (error) {
       console.error('Error exporting to PDF:', error);
       alert('Failed to export report. Please try again.');
+    } finally {
+      // Revert to the original theme
+      if (originalTheme) {
+        setTheme(originalTheme);
+      }
+      setIsExporting(false);
     }
-    setIsExporting(false);
   };
 
   type ExportableRow = {
@@ -144,7 +158,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden" onClick={() => setSidebarOpen(false)} />
         )}
 
-        <div className={cn("fixed inset-y-0 left-0 z-50 w-72 transform transition-transform duration-300 ease-smooth lg:translate-x-0", sidebarOpen ? "translate-x-0" : "-translate-x-full")}>
+        <div className={cn("fixed inset-y-0 left-0 z-50 w-72 transform transition-transform duration-300 ease-smooth", sidebarOpen ? "translate-x-0" : "-translate-x-full")}>
           <div className="flex flex-col h-full bg-gradient-glass backdrop-blur-xl border-r border-glass-border shadow-glass">
             <div className="flex items-center justify-between px-6 py-6">
               <div className="flex items-center space-x-3">
@@ -156,7 +170,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   <p className="text-sm text-muted-foreground">Insights</p>
                 </div>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)}>
+              <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
                 <X className="w-5 h-5" />
               </Button>
             </div>
@@ -177,11 +191,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </div>
         </div>
 
-        <div className="lg:pl-72">
+        <div className={cn("transition-all duration-300 ease-smooth", sidebarOpen ? "lg:pl-72" : "lg:pl-0")}>
           <div className="sticky top-0 z-30 bg-gradient-glass backdrop-blur-xl border-b border-glass-border shadow-glass">
             <div className="flex items-center justify-between px-6 py-4">
               <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
+                <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(!sidebarOpen)}>
                   <Menu className="w-5 h-5" />
                 </Button>
                 <div>
